@@ -1,6 +1,5 @@
 package com.tbuss.pg
-import groovy.transform.Immutable
-import groovy.transform.Memoized
+import groovy.transform.*
 
 class SAGH {
     @Memoized
@@ -42,23 +41,14 @@ class Artist {
 }
 
 @Immutable
+@EqualsAndHashCode(excludes="artist")
 class Track {
     Integer id
     Artist artist
     String name = 'unknown'
 
     String toString() { "$name by $artist" }
-
-    boolean equals(o) {
-        if (this.is(o)) return true
-        if (getClass() != o.class) return false
-        Track track = (Track) o
-        if (id != track.id) return false
-        return true
-    }
-
-    int hashCode() { id.hashCode() }
-
+    
     static Track parse(String it) {
         [id    : it.split(':')[1] as Integer,
          artist: [id: it.split(':')[0] as Integer] as Artist] as Track
